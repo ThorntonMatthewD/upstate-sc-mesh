@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upstate SC Mesh</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="#" class="logo">Upstate SC Mesh</a>
+        <nav>
+            <button class="menu-toggle" aria-controls="primary-navigation" aria-expanded="false">
+                <span class="sr-only">Menu</span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul id="primary-navigation" class="nav-links">
+                <li class="mobile-menu-logo-item">
+                    <a href="#" class="logo mobile-logo">Upstate SC Mesh</a>
+                </li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#join">Join Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="top" class="hero">
+            <div class="hero-text">
+                <h1>Welcome to Upstate SC Mesh</h1>
+                <p>A community-powered, off-grid communication network for the Upstate of South Carolina.</p>
+                <a href="#join" class="cta-button">Get Involved</a>
+            </div>
+        </section>
+
+        <section id="about" class="content-section">
+            <h2>About Meshtastic</h2>
+            <p><a href="https://meshtastic.org/" target="_blank">Meshtastic</a> is an <a href="https://github.com/meshtastic/Meshtastic-device" target="_blank">open-source project</a> that uses affordable, low-power devices to create a long-range, off-grid communication network. It's perfect for hiking, emergencies, or just staying connected where cell service is unavailable.</p>
+            <h2 class="community-heading">Our Community</h2>
+            <p>Upstate SC Mesh is a group of enthusiasts, hobbyists, and prepared individuals building and maintaining a Meshtastic network. While centered in the Upstate, our network is for all of South Carolina. We welcome anyone to join our community, regardless of location, to collaborate on expanding coverage, share knowledge, and support each other.</p>
+        </section>
+
+        <section id="join" class="content-section cta-section">
+            <h2>Join Us</h2>
+            <p>Ready to be a part of the mesh? Join our Discord community to get started, ask questions, and connect with other members.</p>
+            <a href="https://discord.gg/YDH4UJanHD" target="_blank" class="cta-button">Join our Discord</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Upstate SC Mesh</p>
+    </footer>
+
+    <script>
+        const sections = document.querySelectorAll('.content-section');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        const navLinksList = navLinks.querySelectorAll('a'); // Select all anchor tags within navLinks
+
+        // Function to handle opening/closing the mobile menu with transitions
+        function toggleMobileMenu() {
+            const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+            menuToggle.setAttribute('aria-expanded', !isExpanded);
+
+            if (!isExpanded) { // Menu is currently closed, about to open
+                if (window.innerWidth <= 945) { // Only apply for mobile view
+                    navLinks.style.display = 'flex';
+                }
+                // Reintroduce setTimeout to allow display: flex to render before adding 'active'
+                setTimeout(() => {
+                    navLinks.classList.add('active');
+                }, 10); // Small delay
+            } else { // Menu is currently open, about to close
+                navLinks.classList.remove('active');
+                navLinks.addEventListener('transitionend', function handler() {
+                    if (!navLinks.classList.contains('active') && window.innerWidth <= 945) {
+                        navLinks.style.display = 'none';
+                    }
+                    navLinks.removeEventListener('transitionend', handler);
+                }, { once: true });
+            }
+        }
+
+        // Event listener for menu toggle button
+        menuToggle.addEventListener('click', toggleMobileMenu);
+
+        // Add event listeners to navigation links to close the menu
+        navLinksList.forEach(link => {
+            link.addEventListener('click', () => {
+                if (menuToggle.getAttribute('aria-expanded') === 'true') {
+                    toggleMobileMenu(); // Call toggleMobileMenu to close the menu
+                }
+            });
+        });
+
+        // New code for resize handling
+        function handleResize() {
+            if (window.innerWidth > 945) { // If desktop view
+                navLinks.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                navLinks.style.display = 'flex';
+            } else { // Mobile view
+                if (!navLinks.classList.contains('active')) {
+                    navLinks.style.display = 'none';
+                } else {
+                    navLinks.style.display = 'flex';
+                }
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+        window.addEventListener('DOMContentLoaded', handleResize);
+    </script>
+</body>
+</html>

@@ -219,6 +219,10 @@ header {
     border-radius: 10px;
     padding: 4rem;
     border: 1px solid var(--border-color);
+
+    .cta-button {
+        margin-bottom: 1rem;
+    }
 }
 
 footer {
